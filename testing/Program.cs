@@ -34,7 +34,7 @@ class Board
     {
         int i = 0;
 
-        Console.Clear();
+        //Console.Clear();
         while (i < 9)
         {
             Console.Write(" {0} ", board[i]);
@@ -52,35 +52,46 @@ class Board
     }
     private Boolean checkWin(int pos)
     {
-        Console.WriteLine(pos);
-        char symbl = board[pos - 1];
-        int check = pos - 4;
-        int count = 0;
-        int match = 0;
+        
+        int ind = pos - 4;
+        int adj = 0;
+        char symb = board[pos - 1];
 
-
-        while (count < 8)
+        while (adj < 9)
         {
-            if (count != 0 && count % 2 == 1)
+            Console.WriteLine("pos = {0} ind = {1} adj = {2}", pos, ind, adj);
+            if (ind > 0 && ind <= 9 && board[ind] == symb)
             {
-                Console.WriteLine("HERE");
-
-                check = (pos - 4) + (count / 2);
-                match = 0;
-            }
-            if (check - 1 > 0 && check - 1 < 9 && board[check - 1] == symbl)
-            {
-                ++match;
-                Console.WriteLine("check = {0} match = {1} symbl = {2}", check - 1, match, symbl);
-                if (match == 2)
+                Console.WriteLine("in");
+                if (((pos * 2) - ind) < 9 && board[(pos * 2) - ind] == symb)
+                {
+                    Console.WriteLine("twins");
                     return true;
+                }
+                else if (((ind + 1) * 2) - pos - 1 < 9 && ((ind + 1) * 2) - pos - 1 >= 0 && board[((ind + 1) * 2) - pos - 1] == symb)
+                {
+                    Console.WriteLine("{0}", ((ind + 1) * 2) - pos - 1);
+                    return true;
+                }
             }
-            if (count == 0 || count % 2 == 0)
+            if (adj / 3 == 0)
             {
-                Console.WriteLine("inside");
-                check = (pos * 2) - check;
+                Console.WriteLine("AAA");
+                ++ind;
             }
-            count++;
+            else if (adj / 3 == 1)
+            {
+                Console.WriteLine("BBB");
+                ind = pos - 1;
+                if (adj > 3)
+                {
+                    ind = pos + 1;
+                    ++adj;
+                }
+            }
+            else
+                ind = (pos + 3) - (adj - 3);
+            adj++;
         }
         return false;
     }
