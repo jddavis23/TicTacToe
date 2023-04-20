@@ -34,7 +34,7 @@ class Board
     {
         int i = 0;
 
-        //Console.Clear();
+        Console.Clear();
         while (i < 9)
         {
             Console.Write(" {0} ", board[i]);
@@ -59,29 +59,19 @@ class Board
 
         while (adj < 9)
         {
-            Console.WriteLine("pos = {0} ind = {1} adj = {2}", pos, ind, adj);
-            if (ind > 0 && ind <= 9 && board[ind] == symb)
+            if (ind > 0 && ind <= 9 && board[ind - 1] == symb)
             {
-                Console.WriteLine("in");
-                if (((pos * 2) - ind) < 9 && board[(pos * 2) - ind] == symb)
-                {
-                    Console.WriteLine("twins");
+                if (((pos * 2) - ind) <= 9 && board[(pos * 2) - ind - 1] == symb)
                     return true;
-                }
-                else if (((ind + 1) * 2) - pos - 1 < 9 && ((ind + 1) * 2) - pos - 1 >= 0 && board[((ind + 1) * 2) - pos - 1] == symb)
-                {
-                    Console.WriteLine("{0}", ((ind + 1) * 2) - pos - 1);
+                else if (((ind) * 2) - pos - 1 < 9 &&
+                    ((ind) * 2) - pos - 1 >= 0 && board[((ind) * 2) - pos - 1] == symb)
                     return true;
-                }
             }
-            if (adj / 3 == 0)
-            {
-                Console.WriteLine("AAA");
+            if ( ind >= 0 && adj / 3 == 0)
                 ++ind;
-            }
-            else if (adj / 3 == 1)
+            else if (adj / 3 == 1 && (( adj == 3 && pos - 2 >= 0 &&
+                (pos - 1) / 3 == (pos - 2) / 3) || (adj == 4 && ((pos - 1) / 3 == pos / 3))))
             {
-                Console.WriteLine("BBB");
                 ind = pos - 1;
                 if (adj > 3)
                 {
@@ -89,8 +79,8 @@ class Board
                     ++adj;
                 }
             }
-            else
-                ind = (pos + 3) - (adj - 3);
+            else if ((pos + 3 - (adj - 5) - 1) / 3 != (pos - 1) / 3 && (pos + 3) - (adj - 6) <= 9 && adj > 5)
+                ind = (pos + 3) - (adj - 5);
             adj++;
         }
         return false;
@@ -106,6 +96,7 @@ class Board
         board[a.pos - 1] = a.getX_O();
         if (checkWin(a.pos))
         {
+            printBoard();
             Console.WriteLine("{0} wins.", a.getX_O());
             System.Environment.Exit(0);
         }
@@ -136,6 +127,7 @@ class Program
             bd.makemove(one);
             if (bd.getFilled() == 9)
             {
+                Board.printBoard();
                 Console.WriteLine("Tie game.");
                 return;
             }
